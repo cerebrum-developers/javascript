@@ -1,0 +1,51 @@
+#Stages defined here
+stages:
+  - build
+  - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - node_modules/
+  - dist-dev/
+  - dist-stage/
+  - dist-prod/
+
+build_development:
+  stage: build
+  script:
+  - npm install
+  - npm run build-development
+  only: ['development']
+
+build_stage:
+  stage: build
+  script:
+  - npm install
+  - npm run build-stage
+  only: ['stage']
+
+build_production:
+  stage: build
+  script:
+  - npm install
+  - npm run build-prod
+  only: ['master']
+  
+deploy_development:
+  stage: deploy
+  script:
+  - rsync -zvhr -e ssh dist-dev/ ubuntu@148.72.159.0:/var/sites/dev/voxxi-pwa-angular/
+  only: ['development']
+  
+deploy_stage:
+  stage: deploy
+  script:
+  - rsync -zvhr -e ssh dist-stage/ ubuntu@$Dev_Server_IP:/var/sites/stage/voxxi-pwa-angular/
+  only: ['stage']
+
+deploy_production:
+  stage: deploy
+  script:
+  - rsync -zvhr -e ssh dist-prod/ ubuntu@$Prod_Server_IP:/var/sites/voxxi-pwa-angular/
+  only: ['master']

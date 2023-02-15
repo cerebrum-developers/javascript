@@ -1,0 +1,14 @@
+node_modules
+.package-lock.json
+.env
+.env.dist
+.vscode
+uploads/*
+!uploads/.gitkeep
+.DS_Store
+.eslintrc.json
+userUtils-backup.js
+database.sh
+mappingScript.js
+logs.txt
+Dockerfile
